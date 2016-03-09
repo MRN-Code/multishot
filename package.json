@@ -1,10 +1,16 @@
 {
   "name": "multishot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Multi-iterative analysis algorithms.",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src test",
+    "preversion": "git checkout master && git pull && npm ls",
+    "publish-major": "npm run preversion && npm version major && git push origin master --tags && npm publish",
+    "publish-minor": "npm run preversion && npm version minor && git push origin master --tags && npm publish",
+    "publish-patch": "npm run preversion && npm version patch && git push origin master --tags && npm publish",
+    "test": "istanbul cover test/_coverage.js",
+    "validate": "npm ls"
   },
   "keywords": [
     "coinstac",
@@ -13,5 +19,26 @@
     "iterative"
   ],
   "author": "Cory Reed <creed@mrn.org>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "coinstac-distributed-algorithm-set": "github:mrn-code/coinstac-distributed-algorithm-set",
+    "freesurfer-parser": "github:mrn-code/freesurfer-parser",
+    "lodash": "^4.6.1",
+    "numeric": "^1.2.6"
+  },
+  "devDependencies": {
+    "deep-freeze": "0.0.1",
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-react": "^4.2.0",
+    "istanbul": "^0.4.2",
+    "pre-commit": "^1.1.2",
+    "sinon": "^1.17.3",
+    "tape": "^4.5.1"
+  },
+  "pre-commit": [
+    "validate",
+    "lint",
+    "test"
+  ]
 }

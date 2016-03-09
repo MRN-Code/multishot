@@ -1,0 +1,25 @@
+[{
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 100
+        },
+        "objective": 111111,
+        "r2": 0.0123
+    }
+}, {
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 100
+        },
+        "objective": 21,
+        "r2": 0.003345
+    }
+}, {
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 100
+        },
+        "objective": 133,
+        "r2": 1
+    }
+}]

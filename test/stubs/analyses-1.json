@@ -1,0 +1,31 @@
+[{
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 0.0001337,
+            "Right-Hippocampus": 0.80085
+        },
+        "objective": [1, 2, 3],
+        "r2": 0.0123
+    },
+    "previousBestFit": {}
+}, {
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 0.000101,
+            "Right-Hippocampus": 0.45
+        },
+        "objective": [4, 5],
+        "r2": 0.003345
+    },
+    "previousBestFit": {}
+}, {
+    "data": {
+        "gradient": {
+            "Left-Hippocampus": 0.000361,
+            "Right-Hippocampus": 99
+        },
+        "objective": [6, 7, 8, 9],
+        "r2": 1
+    },
+    "previousBestFit": {}
+}]
