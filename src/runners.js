@@ -8,40 +8,51 @@ const numeric = require('numeric');
 /**
  * Compute regression on the client.
  *
- * @param {array} xVals ?
- * @param {array} yVals ?
- * @param {array} aggregateMVals ?
+ * @example
+ * computeRegression(
+ *   [[100, 200], [101, 201], [102, 202], [103, 203], [104, 204]],
+ *   [[300, 400], [301, 401], [302, 402], [303, 403], [304, 404]],
+ *   [0.123, 0.456]
+ *   ['Left-Hippocampus', 'Right-Hippocampus']
+ * );
+ *
+ * @param {array[]} xVals Predictors
+ * @param {array[]} yVals Dependent variables
+ * @param {number[]} aggregateMVals ?
  * @param {string[]} roiKeys Targetted predictors
  * @returns {object}
  */
 function computeRegression(xVals, yVals, aggregateMVals, roiKeys) {
-  // @TODO dep vars (control/patient) must have both types
-  const normalizedYVals = coinstacAlgorithms.utils.normalize(yVals);
+  // `normalize` accepts 1-dim or 2-dim array
   const normalizedXVals = coinstacAlgorithms.utils.normalize(xVals);
-  const objectiveScore = coinstacAlgorithms.ridgeRegression.objective(
-    aggregateMVals,
-    normalizedXVals,
-    normalizedYVals
-  );
-  const predictedYVals = coinstacAlgorithms.ridgeRegression.applyModel(
-    aggregateMVals,
-    normalizedXVals
-  );
+  const normalizedYVals = coinstacAlgorithms.utils.normalize(yVals);
+
   const gradient = coinstacAlgorithms.ridgeRegression.gradient(
-    aggregateMVals,
-    normalizedXVals,
-    normalizedYVals
+    aggregateMVals,  // {array} M Vals
+    normalizedXVals, // {array} 2-dim array of X Vals
+    normalizedYVals  // {array} yVals
+  );
+
+  // `applyModel` returns a number. `predictedYVals` should be a number.
+  const predictedYVals = coinstacAlgorithms.ridgeRegression.applyModel(
+    aggregateMVals, // {array} M Vals
+    normalizedXVals // {array} X Vals
   );
 
   return {
     gradient: _.zipObject(roiKeys, gradient),
     objective: coinstacAlgorithms.ridgeRegression.objective(
-      aggregateMVals,
-      normalizedXVals,
-      normalizedYVals
+      aggregateMVals,  // {array} of M Vals
+      normalizedXVals, // {array} 2-dim array of X Vals
+      normalizedYVals  // {array} 1-dim ??? array of Y Vals
     ),
+
+    // `previousAggregateMVals` is used to determine whether remote should run
     previousAggregateMVals: aggregateMVals,
-    r2: coinstacAlgorithms.utils.r2(normalizedXVals, predictedYVals),
+    r2: coinstacAlgorithms.utils.r2(
+      normalizedYVals, // {number[]} sampleData 1-dim array
+      predictedYVals   // {number} modelData (should be a number?)
+    ),
   };
 }
 

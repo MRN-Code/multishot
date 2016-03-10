@@ -11,7 +11,17 @@ const pkg = require('../package.json');
 const runners = require('./runners.js');
 
 /** Algorithm-specific constants. */
-const EPSILON = 1;
+
+/**
+ * Epsilon.
+ *
+ * This value is used when calculating Laplacian noise.
+ *
+ * @todo Figure out how to integrate into multishot.
+ *
+ * @type {number}
+ */
+const EPSILON = 1; // eslint-disable-line no-unused-vars
 const INITIAL_LEARNING_RATE = 0.7;
 const MAX_ITERATION_COUNT = 200;
 const ROI_KEYS = ['Left-Hippocampus'];
@@ -41,9 +51,27 @@ module.exports = {
         return callback(null, null);
       }
 
-
-      const aggregateMVals = params.remoteResult.mVals;
       const filenames = params.filenames;
+
+      /**
+       * The remote result's mVals are stored as such:
+       *
+       * {
+       *   'Left-Hippocampus': 100,
+       *   'Right-Hippocampus': 101,
+       *   //...
+       * }
+       *
+       * The regression computation expects these to be a 1-dimensional in the
+       * order of `ROI_KEYS`.
+       *
+       * @type {number[]}
+       */
+      const aggregateMVals = helpers.pickOrderedValues(
+        ROI_KEYS,
+        params.remoteResult.mVals
+      );
+
       const previousData = params.previousData;
       const controls = [];
       const patients = [];

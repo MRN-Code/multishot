@@ -219,6 +219,49 @@ function getRemoteSeed(options) {
   return seed;
 }
 
+function markRemoteComplete(remoteResult) {
+  return _.assign({}, remoteResult, { complete: true });
+}
+
+/**
+ * Pick ordered values.
+ *
+ * @example
+ * pickOrderedValues(
+ *   ['wat', 'silly'],
+ *   { silly: 100, thing: 200, wat: 300 }
+ * );
+ * // => [300, 100]
+ *
+ * @param {string[]} order Collection of properties to pick from `values`
+ * @param {Object} values
+ * @param {boolean} [strict=false] Throw an error if `values` is missing a
+ * property specified in `order`
+ * @returns {Array}
+ */
+function pickOrderedValues(order, values, strict) {
+  if (!Array.isArray(order)) {
+    throw new Error('Expected order to be an array');
+  }
+  if (!(values instanceof Object)) {
+    throw new Error('Expected values to be an object');
+  }
+
+  if (strict) {
+    const valuesKeys = Object.keys(values);
+
+    order.forEach(item => {
+      if (valuesKeys.indexOf(item) === -1) {
+        throw new Error(`Values missing property ${item}`);
+      }
+    });
+  }
+
+  return order.reduce((accumulator, prop) => { // eslint-disable-line arrow-body-style
+    return accumulator.concat(values[prop]);
+  }, []);
+}
+
 // TODO:  Figure out how to cache files' FreeSurfer analysis
 function getROIsFromFiles(filenames, roiKeys, callback) {
   async.waterfall([
@@ -246,21 +289,12 @@ function getROIsFromFiles(filenames, roiKeys, callback) {
           return cb3a(error);
         }
 
-        const rois = roiKeys.reduce((all, key) => {
-          all[key] = freesurfer[key]; // eslint-disable-line no-param-reassign
-          return all;
-        }, {});
-
-        cb3a(null, rois);
+        cb3a(null, pickOrderedValues(roiKeys, freesurfer));
       },
       cb3
     ),
     callback,
   ]);
-}
-
-function markRemoteComplete(remoteResult) {
-  return _.assign({}, remoteResult, { complete: true });
 }
 
 module.exports = {
@@ -280,5 +314,6 @@ module.exports = {
   getRemoteSeed: getRemoteSeed,
   getROIsFromFiles: getROIsFromFiles,
   markRemoteComplete: markRemoteComplete,
+  pickOrderedValues: pickOrderedValues,
   /* eslint-enable object-shorthand */
 };
