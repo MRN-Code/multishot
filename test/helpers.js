@@ -7,7 +7,7 @@ const random = require('lodash/random');
 const sampleAnalyses1 = require('./stubs/analyses-1.json');
 const sampleAnalyses2 = require('./stubs/analyses-2.json');
 const sinon = require('sinon');
-const test = require('tape');
+const tape = require('tape');
 
 /**
  * Sample ROI keys derived from stubs.
@@ -44,12 +44,12 @@ deepFreeze(sampleAnalyses1);
 deepFreeze(sampleAnalyses2);
 deepFreeze(sampleMVals2);
 
-test('mean', t => {
+tape('mean', t => {
   t.equals(helpers.mean([1, 15, 22, -3]), 8.75);
   t.end();
 });
 
-test('sum', t => {
+tape('sum', t => {
   t.equals(helpers.sum([1, 6, -10, 12]), 9, 'regular array');
   t.equals(
     helpers.sum([[1, 2, 3], [4, 5], [6, 7, 8, 9]]),
@@ -59,7 +59,7 @@ test('sum', t => {
   t.end();
 });
 
-test('get objective values', t => {
+tape('get objective values', t => {
   t.deepEqual(
     helpers.getObjectiveValues(sampleAnalyses1),
     [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
@@ -67,7 +67,7 @@ test('get objective values', t => {
   t.end();
 });
 
-test('unzip ROI key pairs', t => {
+tape('unzip ROI key pairs', t => {
   const one = {
     peaches: 0,
     mangos: 1,
@@ -90,7 +90,7 @@ test('unzip ROI key pairs', t => {
   t.end();
 });
 
-test('zip ROI key pairs', t => {
+tape('zip ROI key pairs', t => {
   const one = Math.random();
   const two = {
     apples: 0,
@@ -108,21 +108,37 @@ test('zip ROI key pairs', t => {
   t.end();
 });
 
-test('get gradient values', t => {
+tape('get gradient values', t => {
   t.deepEqual(
     helpers.getGradientValues(
-      sampleAnalyses1, ['Left-Hippocampus', 'Right-Hippocampus']
+      [{
+        gradient: {
+          'Left-Hippocampus': 0.0001337,
+          'Right-Hippocampus': 0.80085,
+        },
+      }, {
+        gradient: {
+          'Left-Hippocampus': 0.000101,
+          'Right-Hippocampus': 0.45,
+        },
+      }, {
+        gradient: {
+          'Left-Hippocampus': 0.000361,
+          'Right-Hippocampus': 99,
+        },
+      }],
+      ['Right-Hippocampus', 'Left-Hippocampus']
     ),
     [
-      [0.1337, 0.80085],
-      [0.101, 0.45],
-      [100, 99],
+      [0.80085, 0.0001337],
+      [0.45, 0.000101],
+      [99, 0.000361],
     ]
   );
   t.end();
 });
 
-test('get mVals', t => {
+tape('get mVals', t => {
   t.deepEqual(
     helpers.getMVals(sampleAnalyses2, sampleROIKeys),
     sampleMVals2
@@ -130,7 +146,7 @@ test('get mVals', t => {
   t.end();
 });
 
-test('calculate average', t => {
+tape('calculate average', t => {
   const values = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
   const expected = sampleROIKeys.reduce((output, key, index) => {
     // averages of `values` are conveniently in its middle item
@@ -148,7 +164,7 @@ test('calculate average', t => {
 });
 
 // This is essentially an average. Pretty simple.
-test('calculate sensitivity', t => {
+tape('calculate sensitivity', t => {
   const data = getRandomROIData();
   const roi = {
     max: data.max,
@@ -164,7 +180,7 @@ test('calculate sensitivity', t => {
   t.end();
 });
 
-test('calculate Laplace scale', t => {
+tape('calculate Laplace scale', t => {
   const data = getRandomROIData();
   const roi = {
     max: data.max,
@@ -180,7 +196,7 @@ test('calculate Laplace scale', t => {
   t.end();
 });
 
-test('add noise', t => {
+tape('add noise', t => {
   const data = getRandomROIData();
   const roi = {
     max: data.max,
@@ -207,7 +223,7 @@ test('add noise', t => {
   t.end();
 });
 
-test('get ROI values', t => {
+tape('get ROI values', t => {
   const analyses = sampleAnalyses2.map(a => { // eslint-disable-line arrow-body-style
     return {
       data: a.result.mVals,

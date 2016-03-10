@@ -76,10 +76,11 @@ function zipRoiKeyPairs(values, roiKeys) {
  *
  * @param {array} analyses array of analysis documents
  * @param {string[]} roiKeys Collection of region of interest keys
- * @returns {array} array of gradient results, ordered according to roiMeta
+ * @returns {array} array of gradient results, ordered according to roiKeys
  */
 function getGradientValues(analyses, roiKeys) {
-  return _.map(analyses, _.property('data.gradient'))
+  return analyses
+    .map(a => a.gradient)
     .map(values => unzipRoiKeyPairs(values, roiKeys));
 }
 

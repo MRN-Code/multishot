@@ -1,25 +1,22 @@
 [{
-    "data": {
-        "gradient": {
-            "Left-Hippocampus": 100
-        },
-        "objective": 111111,
-        "r2": 0.0123
-    }
+  "gradient": {
+    "Left-Hippocampus": 4400.5
+  },
+  "objective": 300,
+  "previousAggregateMVals": [0.123],
+  "r2": 0.00222
 }, {
-    "data": {
-        "gradient": {
-            "Left-Hippocampus": 100
-        },
-        "objective": 21,
-        "r2": 0.003345
-    }
+  "gradient": {
+    "Left-Hippocampus": 3977.7
+  },
+  "objective": 1500,
+  "previousAggregateMVals": [0.123],
+  "r2": 0.000887
 }, {
-    "data": {
-        "gradient": {
-            "Left-Hippocampus": 100
-        },
-        "objective": 133,
-        "r2": 1
-    }
+  "gradient": {
+    "Left-Hippocampus": 4400.5
+  },
+  "objective": 4321,
+  "previousAggregateMVals": [0.123],
+  "r2": 0.155
 }]

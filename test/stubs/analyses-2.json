@@ -1,25 +1,25 @@
 [{
-    "result": {
-        "mVals": {
-            "SampleKey1": 0,
-            "SampleKey2": -1,
-            "SampleKey3": -2.2
-        }
+  "result": {
+    "mVals": {
+      "SampleKey1": 0,
+      "SampleKey2": -1,
+      "SampleKey3": -2.2
     }
+  }
 }, {
-    "result": {
-        "mVals": {
-            "SampleKey1": 100,
-            "SampleKey2": 90,
-            "SampleKey3": 80
-        }
+  "result": {
+    "mVals": {
+      "SampleKey1": 100,
+      "SampleKey2": 90,
+      "SampleKey3": 80
     }
+  }
 }, {
-    "result": {
-        "mVals": {
-            "SampleKey1": 0.55,
-            "SampleKey2": 0.875,
-            "SampleKey3": 0.1001
-        }
+  "result": {
+    "mVals": {
+      "SampleKey1": 0.55,
+      "SampleKey2": 0.875,
+      "SampleKey3": 0.1001
     }
+  }
 }]

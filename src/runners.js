@@ -12,9 +12,13 @@ const numeric = require('numeric');
  * computeRegression(
  *   [[100, 200], [101, 201], [102, 202], [103, 203], [104, 204]],
  *   [[300, 400], [301, 401], [302, 402], [303, 403], [304, 404]],
- *   [0.123, 0.456]
+ *   [0.123, 0.456],
  *   ['Left-Hippocampus', 'Right-Hippocampus']
  * );
+ *
+ * @todo  The underlying COINSTAC algorithms ridge regression doesn't appear to
+ * accept 2-dimensional arrays. Thus, `xVals` and `yVals` need to be
+ * 1-dimensional.
  *
  * @param {array[]} xVals Predictors
  * @param {array[]} yVals Dependent variables
@@ -110,6 +114,7 @@ function computeAggregate(
   return {
     /* eslint-disable object-shorthand */
     gradient: gradient,
+    iterationCount: previousRemoteResult.iterationCount + 1,
     learningRate: learningRate,
     /* eslint-enable object-shorthand */
 
