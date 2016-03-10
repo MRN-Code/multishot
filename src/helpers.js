@@ -1,7 +1,7 @@
 /**
  * Analysis helpers.
  *
- * Helper functions for running an analysis. They're all pure functions.
+ * Helper functions for running an analysis. They're mostly pure functions.
  */
 
 'use strict';
@@ -191,6 +191,8 @@ function getRoiValues(analyses, roiKeys) {
 }
 
 /**
+ * Get a remote result seed based.
+ *
  * @param {Object} options
  * @param {number} options.learningRate
  * @param {string[]} options.roiKeys
@@ -262,7 +264,42 @@ function pickOrderedValues(order, values, strict) {
   }, []);
 }
 
-// TODO:  Figure out how to cache files' FreeSurfer analysis
+/**
+ * Get regions of interest from Freesurfer files.
+ *
+ * @example
+ * getROIsFromFiles(
+ *   [
+ *     './path/to/parsed/freesurfer-1.txt',
+ *     './path/to/parsed/freesurfer-2.txt',
+ *     './path/to/parsed/freesurfer-3.txt',
+ *   ],
+ *   ['Left-Hippocampus', 'Right-Hippocampus'],
+ *   (error, roiValues) => {
+ *     // `error` will contain any file-reading or Freesurfer-parsing related
+ *     // errors.
+ *     if (error) {
+ *       throw error;
+ *     }
+ *
+ *     // `roiValues` will be a collection of Freesurfer values ordered by file.
+ *     // This is an array of arrays, looking something like:
+ *     // [
+ *     //   [4400.1, 4211.5], (freesurfer-1.txt)
+ *     //   [4369.2, 3971.1], (freesurfer-2.txt)
+ *     //   [4510.7, 4366.0], (freesurfer-3.txt)
+ *     // ]
+ *     console.log(roiValues);
+ *   }
+ * );
+ *
+ * @todo Figure out how to cache files' FreeSurfer analysis
+ *
+ * @param {string[]} filenames Collection of full paths to Freesurfer files
+ * @param {string[]} roiKeys Freesurfer regions of interest (predictors?)
+ * @param {function} callback Node-style callback. Returns a collection of
+ * region-of-interest values.
+ */
 function getROIsFromFiles(filenames, roiKeys, callback) {
   async.waterfall([
     // Read files' contents

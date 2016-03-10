@@ -1,7 +1,3 @@
-/**
- * Multishot.
- * @module
- */
 'use strict';
 
 const async = require('async');
@@ -10,23 +6,60 @@ const isEqual = require('lodash/isEqual');
 const pkg = require('../package.json');
 const runners = require('./runners.js');
 
-/** Algorithm-specific constants. */
+/**
+ * Algorithm-specific constants.
+ *
+ * The following variables are non-changing values applied to every computation.
+ *
+ * @todo Figure out how to vary these – especially `ROI_KEYS` per distributed
+ * computation run.
+ */
 
 /**
- * Epsilon.
- *
- * This value is used when calculating Laplacian noise.
+ * Epsilon. This value is used when calculating Laplacian noise.
  *
  * @todo Figure out how to integrate into multishot.
  *
  * @type {number}
  */
 const EPSILON = 1; // eslint-disable-line no-unused-vars
+
+/**
+ * Initial learning rate. Used to seed the remote computation.
+ *
+ * @type {number}
+ */
 const INITIAL_LEARNING_RATE = 0.7;
+
+/**
+ * Maximum iteration count. Used in the `remote.fn` function to ensure the
+ * iteration doesn’t continue indefinitely.
+ *
+ * @type {number}
+ */
 const MAX_ITERATION_COUNT = 200;
+
+/**
+ * Region of interest keys. These correspond with Freesurfer “predictors.”
+ *
+ * @type {string[]}
+ */
 const ROI_KEYS = ['Left-Hippocampus'];
+
+/**
+ * Tolerance. Used to stop the `remote.fn` if the square root of the sum of
+ * squares of the aggregate gradient falls below this value.
+ *
+ * @see runners/computeAggregate
+ *
+ * @type {number}
+ */
 const TOLERANCE = 1e-5;
 
+/**
+ * Multishot.
+ * @module
+ */
 module.exports = {
   label: pkg.description,
   local: {
@@ -77,11 +110,11 @@ module.exports = {
       const patients = [];
 
       /**
-      * Don’t calculate a regression if the last aggregate mVals (stored on the
-      * previous result) match this run's aggregate mVals.
-      *
-      * @todo  Ensure this check is necessary.
-      */
+       * Don’t calculate a regression if the last aggregate mVals (stored on the
+       * previous result) match this run's aggregate mVals.
+       *
+       * @todo  Ensure this check is necessary.
+       */
       if (
         previousData &&
         isEqual(previousData.previousAggregateMVals, aggregateMVals)
